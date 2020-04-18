@@ -1,0 +1,19 @@
+
+# download images from docker hub for wordpress project
+docker pull mysql:5.7
+docker pull wordpress:5.1.1-php7.3-apache
+
+# create volumes like below
+docker volume create mydb
+docker volume create worddb
+
+# launch mysql container with environmental variables
+
+docker container run -dit -e MYSQL_ROOT_PASSWORD=dasireddy -e MYSQL_USER=mohan -e MYSQL_PASSWORD=vihar -e MYSQL_DATABASE=wordpressdb -v mydb:/var/lib/mysql --name dbos mysql:5.7
+
+
+# launch wordpress container with depend on mysql
+
+docker container run -dit -e WORDPRESS_DB_HOST=dbos -e WORDPRESS_DB_USER=mohan -e WORDPRESS_DB_PASSWORD=vihar -e WORDPRESS_DB_NAME=wordpressdb -v worddb:/var/www/html --link dbos -p 8080:80 --name web wordpress:5.1.1-php7.3-apache
+~
+
